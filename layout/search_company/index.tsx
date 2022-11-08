@@ -1,15 +1,29 @@
+import axios from "axios";
 import { FC, useEffect, useState } from "react"
-import { MdOutlineHouse, MdSearch } from 'react-icons/md'
+import { MdClose, MdOutlineHouse, MdSearch } from 'react-icons/md'
+import { useQuery } from "react-query";
 import { Input } from "../../components/input/input"
 import { Spinner } from "../../components/spinner"
+import { useDebounce } from "../../hooks/useDebounce";
+import { ICompany } from "../../types/company";
 
 interface IProps {
-    setCompanyInfoVisible: () => void;
+    activeMarker: number | null;
+    setActiveMarker: (id: number | null) => void;
 }
 
-export const SearchCompany: FC<IProps> = ({ setCompanyInfoVisible }) => {
+export const SearchCompany: FC<IProps> = ({ setActiveMarker, activeMarker }) => {
     const [search, setSearch] = useState<string>('')
+    const debouncedFilter = useDebounce<string>(search, 500);
     const [listVisible, setListVisible] = useState<boolean>(false)
+    const { data, isLoading, error } = useQuery<ICompany[]>([
+        'companies', debouncedFilter
+    ], async () => {
+        const { data } = await axios.get(`/supplinx/fill-map?nameContains=${debouncedFilter}`)
+        return data
+    }, {
+        enabled: Boolean(debouncedFilter) && debouncedFilter.length > 3
+    })
 
     useEffect(() => {
         if (search.length > 2) {
@@ -19,9 +33,16 @@ export const SearchCompany: FC<IProps> = ({ setCompanyInfoVisible }) => {
         }
     }, [search])
 
-    const optionClickedHandler = () => {
-        setCompanyInfoVisible()
+    const optionClickedHandler = (id: number) => {
+        setActiveMarker(id)
         setListVisible(false)
+    }
+
+    const closeHandler = () => {
+        setSearch('')
+        if (activeMarker) {
+            setActiveMarker(null)
+        }
     }
 
     return (
@@ -31,10 +52,24 @@ export const SearchCompany: FC<IProps> = ({ setCompanyInfoVisible }) => {
                 <button className="flex-shrink-0 px-3 self-stretch" >
                     <MdSearch className="text-xl" />
                 </button>
+                <button onClick={closeHandler} className={`flex-shrink-0 self-stretch overflow-hidden duration-200 ${debouncedFilter.length > 3 ? 'w-9' : 'w-0'} flex justify-center items-center`} >
+                    <MdClose className="text-xl" />
+                </button>
             </div>
-            {listVisible && <div className="w-full bg-white rounded-b-xl shadow-md absolute left-0 top-12">
-                {/* <Spinner /> */}
-                <div className="flex flex-row items-center py-3 cursor-pointer hover:bg-gray-100 duration-200" onClick={optionClickedHandler}>
+            {listVisible && <div className="w-full bg-white rounded-b-xl shadow-md absolute left-0 top-12 overflow-hidden">
+                {isLoading && <Spinner />}
+                {!isLoading && data?.map(company => (
+                    <div key={company.id} className="flex flex-row items-center py-3 cursor-pointer hover:bg-gray-100 duration-200" onClick={() => optionClickedHandler(company.id)}>
+                        <div className="flex-shrink-0 items-center justify-center px-3">
+                            <MdOutlineHouse className="text-lg" />
+                        </div>
+                        <div>
+                            <span className="font-medium mr-1">{company.name}</span>
+                            <span className="text-xs font-normal text-gray-400">{company.street}, {company.city}</span>
+                        </div>
+                    </div>
+                ))}
+                {/* <div className="flex flex-row items-center py-3 cursor-pointer hover:bg-gray-100 duration-200" onClick={optionClickedHandler}>
                     <div className="flex-shrink-0 items-center justify-center px-3">
                         <MdSearch className="text-lg" />
                     </div>
@@ -51,16 +86,7 @@ export const SearchCompany: FC<IProps> = ({ setCompanyInfoVisible }) => {
                         <span className="font-medium mr-1">JohnCube</span>
                         <span className="text-xs font-normal text-gray-400">Św. Józefa, Rybnik</span>
                     </div>
-                </div>
-                <div className="flex flex-row items-center py-3 cursor-pointer hover:bg-gray-100 duration-200">
-                    <div className="flex-shrink-0 items-center justify-center px-3">
-                        <MdOutlineHouse className="text-lg" />
-                    </div>
-                    <div>
-                        <span className="font-medium mr-1">JohnCube</span>
-                        <span className="text-xs font-normal text-gray-400">Św. Józefa, Rybnik</span>
-                    </div>
-                </div>
+                </div> */}
             </div>}
         </div>
     )

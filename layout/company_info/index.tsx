@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { Button } from "../../components/button";
 import { MdApartment, MdKeyboardArrowDown, MdOutlinePeopleAlt } from "react-icons/md";
 import { FaFacebookSquare, FaGlobe, FaInstagramSquare, FaLinkedin, FaTwitterSquare, FaYoutubeSquare } from "react-icons/fa";
@@ -19,19 +19,18 @@ import { BASE_URL } from "../../pages/_app";
 interface IProps {
     visible: boolean;
     activeMarker: number | null;
+    data: ICompany | undefined;
+    isLoading: boolean;
 }
 
-export const CompanyInfo: FC<IProps> = ({ visible, activeMarker }) => {
-    const { isLoading, data, error } = useQuery<ICompany>({
-        queryKey: 'company' + activeMarker,
-        queryFn: async () => {
-            const { data } = await axios.get(`/custom-company/company-info/${activeMarker}`)
-            console.log(data)
-            return data
-        },
-        enabled: activeMarker !== null
-    })
+export const CompanyInfo: FC<IProps> = ({ visible, activeMarker, data, isLoading }) => {
     const [secondaryVisible, setSecondaryVisible] = useState(false)
+    const clients = useMemo(() => {
+        return data?.partners.filter(partner => partner.type === 'client')
+    }, [data])
+    const suppliers = useMemo(() => {
+        return data?.partners.filter(partner => partner.type === 'supplier')
+    }, [data])
 
     useEffect(() => {
         if (!visible) setSecondaryVisible(false)
@@ -44,7 +43,7 @@ export const CompanyInfo: FC<IProps> = ({ visible, activeMarker }) => {
                     <div className="py-2 px-2 border-b border-gray-200 pb-5">
                         <div className="flex justify-between items-center">
                             <div className="w-20 h-20 rounded-full bg-gray-300 overflow-hidden">
-                                {data?.logo.url ? <Image src={BASE_URL + data?.logo.url} alt="Loog" width={80} height={80} /> : null}
+                                {data?.logo?.url ? <Image src={BASE_URL + data?.logo.url} alt="Loog" width={80} height={80} /> : null}
                             </div>
                             <div className="flex flex-col justify-center">
                                 <Button label="Contact" />
@@ -122,20 +121,24 @@ export const CompanyInfo: FC<IProps> = ({ visible, activeMarker }) => {
                     <div className="py-4 px-2 border-b border-gray-200">
                         <p className="text-xl font-medium">Customers</p>
                         <div className="flex flex-col gap-2 mt-3">
-                            <CompanyTile label="Breathment" />
-                            <CompanyTile label="Lemon.io" />
-                            <CompanyTile label="White Octopus" />
+                            {
+                                clients?.slice(0, 3).map((partner, index) => (
+                                    <CompanyTile label={partner.partner.name} key={'partner_' + partner.partner.id} />
+                                ))
+                            }
                         </div>
-                        <MoreButton onClick={setSecondaryVisible.bind(true, !secondaryVisible)} label={`Show all (${5})`} />
+                        {clients !== undefined && clients.length > 3 && <MoreButton onClick={setSecondaryVisible.bind(true, !secondaryVisible)} label={`Show all (${clients.length})`} />}
                     </div>
                     <div className="py-4 px-2 border-b border-gray-200">
                         <p className="text-xl font-medium">Suppliers</p>
                         <div className="flex flex-col gap-2 mt-3">
-                            <CompanyTile label="Breathment" />
+                            {
+                                suppliers?.slice(0, 3).map((partner, index) => (
+                                    <CompanyTile label={partner.partner.name} key={'partner_' + partner.partner.id} />
+                                ))
+                            }
                         </div>
-                        {/* <div className="mt-2">
-                    <p className="py-1.5 text-sm mt-[2px] text-blue-500 font-medium text-right">Show all (5)</p>
-                </div> */}
+                        {suppliers !== undefined && suppliers.length > 3 && <MoreButton onClick={setSecondaryVisible.bind(true, !secondaryVisible)} label={`Show all (${suppliers.length})`} />}
                     </div>
                     <div className="py-4 px-2 border-b border-gray-200">
                         <p className="text-xl font-medium">Evaluation</p>

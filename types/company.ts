@@ -24,10 +24,23 @@ export type ICompany = {
     size: string;
     tiktok: string;
     funding_date: string;
-    products: IProduct[]
+    products: IProduct[];
+    partners: IConnection[];
+    mother_company: ICompany;
 }
 
 export type IProduct = {
     id: number;
+    name: string;
+}
+
+export type IConnection = {
+    connection_id: number;
+    partner: ICompany;
+    partner_confirmed: string;
+    type: 'client' | 'supplier';
+}
+
+export type IIndustry = {
     name: string;
 }

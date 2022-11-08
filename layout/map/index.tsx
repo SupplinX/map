@@ -4,7 +4,8 @@ import { CurveMarker, kurwaNaMapie } from '../../components/curve_line';
 import CustomMarker from '../../components/marker/marker';
 import { useQuery } from 'react-query'
 import axios from 'axios'
-import { ICompany } from '../../types/company';
+import { ICompany, IConnection } from '../../types/company';
+import { CustomPolyline } from './components/polyline';
 
 const containerStyle = {
     width: '100%',
@@ -16,16 +17,17 @@ const center = {
 };
 
 interface IProps {
-    setCompanyInfoVisible: (visible?: boolean) => void;
+    setCompanyInfoVisible: () => void;
     setActiveMarker: (id: number) => void;
     activeMarker: number | null;
+    selectedCompany: ICompany | undefined;
 }
 
-export const MapView: FC<IProps> = ({ setCompanyInfoVisible, setActiveMarker, activeMarker }) => {
+export const MapView: FC<IProps> = ({ setCompanyInfoVisible, setActiveMarker, activeMarker, selectedCompany }) => {
     const { isLoading, error, data } = useQuery<ICompany[]>({
         queryKey: 'companies',
         queryFn: async () => {
-            const { data } = await axios.get('/mapflow-companies/fill-map')
+            const { data } = await axios.get('/supplinx/fill-map')
             return data
         }
     })
@@ -76,12 +78,14 @@ export const MapView: FC<IProps> = ({ setCompanyInfoVisible, setActiveMarker, ac
                     streetViewControl: false,
                     mapTypeControl: false,
                     fullscreenControl: false,
-                    zoomControl: false
+                    zoomControl: false,
+                    clickableIcons: false,
                 }}
-                onClick={() => setCompanyInfoVisible(false)}
+                onRightClick={() => setCompanyInfoVisible()}
+            // onClick={() => setCompanyInfoVisible(false)}
             >
                 {
-                    data?.map((company, index) => {
+                    activeMarker === null && data?.map((company, index) => {
                         return <CustomMarker
                             key={index}
                             company={company}
@@ -91,10 +95,40 @@ export const MapView: FC<IProps> = ({ setCompanyInfoVisible, setActiveMarker, ac
                         />
                     })
                 }
-                {/* <Polyline path={[
-                    { lat: 50.146231, lng: 38.689755 },
-                    { lat: 51.346231, lng: 19.689755 },
-                ]} options={{ geodesic: true, strokeWeight: 2, strokeColor: '#fff' }} /> */}
+                {
+                    activeMarker !== null && selectedCompany && <>
+                        <CustomMarker
+                            company={selectedCompany}
+                            map={map}
+                            setActiveMarker={setActiveMarker}
+                            active={activeMarker === selectedCompany.id}
+                        />
+                        {selectedCompany.mother_company && <CustomMarker
+                            company={selectedCompany.mother_company}
+                            map={map}
+                            setActiveMarker={setActiveMarker}
+                            active={false}
+                            mother={true}
+                        />}
+                    </>
+                }
+                {
+                    selectedCompany?.partners?.map((connection, index) => {
+                        return <>
+                            {(!selectedCompany.mother_company || selectedCompany.mother_company.id !== connection.partner.id) && <CustomMarker
+                                key={index}
+                                company={connection.partner}
+                                map={map}
+                                setActiveMarker={setActiveMarker}
+                                active={false}
+                            />}
+                            <CustomPolyline path={[
+                                { lat: parseFloat(connection.partner.lat), lng: parseFloat(connection.partner.lng) },
+                                { lat: parseFloat(selectedCompany.lat), lng: parseFloat(selectedCompany.lng) },
+                            ]} activeMarker={activeMarker} map={map} />
+                        </>
+                    })
+                }
             </GoogleMap >
         </div>
     )
