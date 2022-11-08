@@ -2,7 +2,7 @@ export type ICompany = {
     id: number;
     name: string;
     lat: string;
-    lon: string;
+    lng: string;
     description: string;
     logo: {
         id: number;

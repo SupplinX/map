@@ -25,7 +25,7 @@ export const MapView: FC<IProps> = ({ setCompanyInfoVisible, setActiveMarker, ac
     const { isLoading, error, data } = useQuery<ICompany[]>({
         queryKey: 'companies',
         queryFn: async () => {
-            const { data } = await axios.get('/custom-company/fill-map')
+            const { data } = await axios.get('/mapflow-companies/fill-map')
             return data
         }
     })
