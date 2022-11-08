@@ -36,7 +36,7 @@ export default function Home() {
         <Logo />
       </div>
       <CompanyInfo visible={activeMarker !== null} activeMarker={activeMarker} />
-      <MapView activeMarker={activeMarker} setActiveMarker={setActiveMarker} setCompanyInfoVisible={setCompanyInfoVisible.bind(true, !companyInfoVisible)} />
+      {/* <MapView activeMarker={activeMarker} setActiveMarker={setActiveMarker} setCompanyInfoVisible={setCompanyInfoVisible.bind(true, !companyInfoVisible)} /> */}
       <div className='fixed bottom-0 right-0 pb-5 flex flex-row items-center z-50'>
         <MapMenuButton icon={<MdAutoGraph />} />
         <MapMenuButton icon={<MdPersonOutline />} />
