@@ -70,12 +70,12 @@ export const SearchCompany: FC<IProps> = ({ setActiveMarker, activeMarker, addNe
                         </div>
                     </div>
                 ))}
-                {!isLoading && data?.length === 0 && <button onClick={() => {
+                {/* {!isLoading && data?.length === 0 && <button onClick={() => {
                     addNewHandler?.()
                     setListVisible(false)
                 }} className="block w-full text-blue-500 font-medium text-center py-2.5">
                     Company not yet listed. Click here and add manually
-                </button>}
+                </button>} */}
             </div>}
         </div>
     )

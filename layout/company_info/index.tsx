@@ -128,7 +128,7 @@ export const CompanyInfo: FC<IProps> = ({ visible, activeMarker, data, isLoading
                             </div>
                             <div className="flex-1">
                                 <p className="font-medium">Industry</p>
-                                <p className="text-sm">{data?.main_industry.name}</p>
+                                <p className="text-sm">{data?.main_industry?.name}</p>
                             </div>
                         </div>
                     </div>
