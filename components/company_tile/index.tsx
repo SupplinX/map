@@ -15,7 +15,7 @@ export const CompanyTile: FC<IProps> = ({ company, mini = true }) => {
             <div className="flex items-center">
                 <div className="flex-shrink-0 mr-4">
                     <div className="w-8 h-8 overflow-hidden rounded-full">
-                        <Image src={BASE_URL + company.logo.url} width={36} height={36} alt="Company logo" />
+                        {company.logo && <Image src={BASE_URL + company.logo?.url} width={36} height={36} alt="Company logo" />}
                     </div>
                 </div>
                 <div className="flex-1">

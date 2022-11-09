@@ -48,7 +48,7 @@ export const CompanyInfo: FC<IProps> = ({ visible, activeMarker, data, isLoading
                     <div className="py-2 px-2 border-b border-gray-200 pb-5">
                         <div className="flex justify-between items-center">
                             <div className="w-20 h-20 rounded-full bg-gray-300 overflow-hidden">
-                                {data?.logo?.url ? <Image src={BASE_URL + data?.logo.url} alt="Loog" width={80} height={80} /> : null}
+                                {data?.logo?.url ? <Image src={BASE_URL + data?.logo?.url} alt="Loog" width={80} height={80} /> : null}
                             </div>
                             <div className="flex flex-col justify-center">
                                 <Button label="Contact" />
