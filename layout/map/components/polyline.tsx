@@ -21,7 +21,6 @@ export const CustomPolyline: FC<IProps> = ({ path, activeMarker, map }) => {
             polyline.setMap(map);
         }
         return () => {
-            console.log('unmount')
             polyline.setMap(null);
         }
     }, [])

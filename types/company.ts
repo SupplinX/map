@@ -27,11 +27,18 @@ export type ICompany = {
     products: IProduct[];
     partners: IConnection[];
     mother_company: ICompany;
+    child_companies: ICompany[];
+    main_industry: IIndustry;
+    needs: IProduct[]
 }
 
 export type IProduct = {
     id: number;
     name: string;
+    image: {
+        url: string;
+    };
+    active: boolean;
 }
 
 export type IConnection = {
@@ -39,6 +46,7 @@ export type IConnection = {
     partner: ICompany;
     partner_confirmed: string;
     type: 'client' | 'supplier';
+    relation_end: string | null;
 }
 
 export type IIndustry = {

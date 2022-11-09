@@ -21,13 +21,25 @@ interface IProps {
     setActiveMarker: (id: number) => void;
     activeMarker: number | null;
     selectedCompany: ICompany | undefined;
+    industries: number[];
+    products: number[];
+    needs: number[];
 }
 
-export const MapView: FC<IProps> = ({ setCompanyInfoVisible, setActiveMarker, activeMarker, selectedCompany }) => {
+export const MapView: FC<IProps> = ({ setCompanyInfoVisible, setActiveMarker, activeMarker, selectedCompany, industries, products, needs }) => {
     const { isLoading, error, data } = useQuery<ICompany[]>({
-        queryKey: 'companies',
+        queryKey: ['companies', industries, products, needs],
         queryFn: async () => {
-            const { data } = await axios.get('/supplinx/fill-map')
+            let url = `/supplinx/fill-map`
+            let query: string[] = [];
+            if (industries.length > 0) query.push('industries=' + industries.join(','))
+            if (products.length > 0) query.push('products=' + products.join(','))
+            if (needs.length > 0) query.push('needs=' + needs.join(','))
+            if (query.length > 0) {
+                url += '?' + query.join('&')
+            }
+            console.log(url)
+            const { data } = await axios.get(url)
             return data
         }
     })
@@ -108,7 +120,7 @@ export const MapView: FC<IProps> = ({ setCompanyInfoVisible, setActiveMarker, ac
                             map={map}
                             setActiveMarker={setActiveMarker}
                             active={false}
-                            mother={true}
+                            type="mother"
                         />}
                     </>
                 }
@@ -121,11 +133,26 @@ export const MapView: FC<IProps> = ({ setCompanyInfoVisible, setActiveMarker, ac
                                 map={map}
                                 setActiveMarker={setActiveMarker}
                                 active={false}
+                                type={connection.type}
                             />}
                             <CustomPolyline path={[
                                 { lat: parseFloat(connection.partner.lat), lng: parseFloat(connection.partner.lng) },
                                 { lat: parseFloat(selectedCompany.lat), lng: parseFloat(selectedCompany.lng) },
                             ]} activeMarker={activeMarker} map={map} />
+                        </>
+                    })
+                }
+                {
+                    selectedCompany?.child_companies?.map((company, index) => {
+                        return <>
+                            <CustomMarker
+                                key={index}
+                                company={company}
+                                map={map}
+                                setActiveMarker={setActiveMarker}
+                                active={false}
+                                type="child"
+                            />
                         </>
                     })
                 }

@@ -10,9 +10,10 @@ import { ICompany } from "../../types/company";
 interface IProps {
     activeMarker: number | null;
     setActiveMarker: (id: number | null) => void;
+    addNewHandler?: () => void
 }
 
-export const SearchCompany: FC<IProps> = ({ setActiveMarker, activeMarker }) => {
+export const SearchCompany: FC<IProps> = ({ setActiveMarker, activeMarker, addNewHandler }) => {
     const [search, setSearch] = useState<string>('')
     const debouncedFilter = useDebounce<string>(search, 500);
     const [listVisible, setListVisible] = useState<boolean>(false)
@@ -22,7 +23,7 @@ export const SearchCompany: FC<IProps> = ({ setActiveMarker, activeMarker }) => 
         const { data } = await axios.get(`/supplinx/fill-map?nameContains=${debouncedFilter}`)
         return data
     }, {
-        enabled: Boolean(debouncedFilter) && debouncedFilter.length > 3
+        enabled: Boolean(debouncedFilter) && debouncedFilter.length > 2
     })
 
     useEffect(() => {
@@ -46,13 +47,13 @@ export const SearchCompany: FC<IProps> = ({ setActiveMarker, activeMarker }) => 
     }
 
     return (
-        <div className="relative w-96 z-50 pointer-events-auto">
+        <div className="relative w-full z-50 pointer-events-auto">
             <div className={`w-full z-50 shadow-md ${listVisible ? 'rounded-t-xl' : 'rounded-xl'} overflow-hidden flex bg-white items-center`}>
                 <Input placeholder="Search company in database" value={search} onChange={setSearch} />
                 <button className="flex-shrink-0 px-3 self-stretch" >
                     <MdSearch className="text-xl" />
                 </button>
-                <button onClick={closeHandler} className={`flex-shrink-0 self-stretch overflow-hidden duration-200 ${debouncedFilter.length > 3 ? 'w-9' : 'w-0'} flex justify-center items-center`} >
+                <button onClick={closeHandler} className={`flex-shrink-0 self-stretch overflow-hidden duration-200 ${debouncedFilter.length > 2 ? 'w-9' : 'w-0'} flex justify-center items-center`} >
                     <MdClose className="text-xl" />
                 </button>
             </div>
@@ -69,24 +70,12 @@ export const SearchCompany: FC<IProps> = ({ setActiveMarker, activeMarker }) => 
                         </div>
                     </div>
                 ))}
-                {/* <div className="flex flex-row items-center py-3 cursor-pointer hover:bg-gray-100 duration-200" onClick={optionClickedHandler}>
-                    <div className="flex-shrink-0 items-center justify-center px-3">
-                        <MdSearch className="text-lg" />
-                    </div>
-                    <div>
-                        <span className="font-medium mr-1">JohnCube</span>
-                        <span className="text-xs font-normal text-gray-400">43 results</span>
-                    </div>
-                </div>
-                <div className="flex flex-row items-center py-3 cursor-pointer hover:bg-gray-100 duration-200">
-                    <div className="flex-shrink-0 items-center justify-center px-3">
-                        <MdOutlineHouse className="text-lg" />
-                    </div>
-                    <div>
-                        <span className="font-medium mr-1">JohnCube</span>
-                        <span className="text-xs font-normal text-gray-400">Św. Józefa, Rybnik</span>
-                    </div>
-                </div> */}
+                {!isLoading && data?.length === 0 && <button onClick={() => {
+                    addNewHandler?.()
+                    setListVisible(false)
+                }} className="block w-full text-blue-500 font-medium text-center py-2.5">
+                    Company not yet listed. Click here and add manually
+                </button>}
             </div>}
         </div>
     )

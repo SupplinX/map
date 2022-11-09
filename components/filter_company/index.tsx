@@ -9,7 +9,8 @@ import { Spinner } from "../spinner"
 
 interface IProps {
     placeholder: string;
-    type: 'industries' | 'products' | 'needs'
+    type: 'industries' | 'products' | 'needs';
+    toggleIndustry: (id: number) => void;
 }
 
 type StrapiIndustry = {
@@ -17,29 +18,32 @@ type StrapiIndustry = {
     attributes: IIndustry
 }
 
-export const FilterCompany: FC<IProps> = ({ placeholder }) => {
+
+export const FilterCompany: FC<IProps> = ({ placeholder, toggleIndustry, type }) => {
     const [listVisible, setListVisible] = useState<boolean>(false)
     const [chips, setChips] = useState<StrapiIndustry[]>([])
 
     const [search, setSearch] = useState<string>("")
     const debouncedFilter = useDebounce<string>(search, 500);
     const { data, isLoading, error } = useQuery<StrapiIndustry[]>([
-        'companies', debouncedFilter
+        type, debouncedFilter
     ], async () => {
-        const { data } = await axios.get<{ data: StrapiIndustry[] }>(`/industries?filters[name][$containsi]=${debouncedFilter}`)
+        const { data } = await axios.get<{ data: StrapiIndustry[] }>(`/${type}?filters[name][$containsi]=${debouncedFilter}`)
         console.log(data.data)
         return data.data
     }, {
-        enabled: Boolean(debouncedFilter) && debouncedFilter.length > 3
+        enabled: Boolean(debouncedFilter) && debouncedFilter.length > 2
     })
 
     const optionClickedHandler = (industry: StrapiIndustry) => {
         setChips([...chips, industry])
         setSearch('')
+        toggleIndustry(industry.id)
     }
 
     const removeChip = (id: number) => {
         setChips(chips.filter(chip => chip.id !== id))
+        toggleIndustry(id)
     }
 
     useEffect(() => {
@@ -70,7 +74,7 @@ export const FilterCompany: FC<IProps> = ({ placeholder }) => {
                     ))
                 }
             </div>
-            {listVisible && <div className="w-full bg-white rounded-b-xl shadow-md absolute left-0 top-12 overflow-hidden">
+            <div className="w-full bg-white rounded-b-xl shadow-md absolute left-0 top-12 overflow-hidden">
                 {isLoading && <Spinner />}
                 {
                     !isLoading && data?.map((industry, index) => (
@@ -79,7 +83,7 @@ export const FilterCompany: FC<IProps> = ({ placeholder }) => {
                         </div>
                     ))
                 }
-            </div>}
+            </div>
         </div>
     )
 }
