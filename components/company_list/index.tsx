@@ -13,24 +13,26 @@ export const CompanyList: FC<IProps> = ({ companies }) => {
     const activeClients = useMemo(() => {
         return companies?.filter(company => company.relation_end === null)
     }, [])
+    const [showAllInActive, toggleAllInActive] = useState(false)
+    const inactiveClients = useMemo(() => {
+        return companies?.filter(company => company.relation_end !== null)
+    }, [])
 
     return (<div className="p-4">
         <p className="text-2xl font-medium mb-3 pl-1">Active</p>
-        <div className="">
+        <div className="grid gap-4">
             {
                 activeClients?.map(company => <CompanyTile key={company.connection_id} company={company.partner} mini={false} />)
             }
         </div>
         {(activeClients && activeClients.length > 2) && <MoreButton label={`${showAllActive ? 'Show less' : `Show all (${activeClients?.length})`}`} onClick={toggleAllActive.bind(true, !showAllActive)} />}
-        {/* <p className="text-2xl font-medium mb-3 mt-10 pl-1">Inactive</p>
-        <div className="grid grid-cols-2 gap-2">
+        <p className="text-2xl font-medium mb-3 mt-10 pl-1">Inactive</p>
+        <div className="grid gap-4">
             {
-                inactiveProducts?.slice(0, showAllInactive ? undefined : 4).map((product, index) => {
-                    return <ProductCard key={'product' + index} product={product} />
-                })
+                inactiveClients?.map(company => <CompanyTile key={company.connection_id} company={company.partner} mini={false} />)
             }
         </div>
-        {(products && products.length > 4) && <MoreButton label={`${showAllInactive ? 'Show less' : `Show all (${inactiveProducts?.length})`}`} onClick={toggleAllInactive.bind(true, !showAllInactive)} />} */}
+        {(inactiveClients && inactiveClients.length > 4) && <MoreButton label={`${showAllInActive ? 'Show less' : `Show all (${inactiveClients?.length})`}`} onClick={toggleAllInActive.bind(true, !showAllInActive)} />}
     </div>
     )
 }

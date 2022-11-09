@@ -57,7 +57,7 @@ export default function Home() {
         <MapMenuButton icon={<MdPersonOutline />} />
         <MapMenuButton icon={<MdMenu />} />
       </div>
-      {true && <Profile id={activeMarker} />}
+      {/* {true && <Profile id={activeMarker} />} */}
     </div>
   )
 }
