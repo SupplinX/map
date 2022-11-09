@@ -6,7 +6,7 @@ interface IProps {
 
 export const MapMenuButton: FC<IProps> = ({ icon }) => {
     return (
-        <button className="h-14 w-14 rounded-xl bg-default-600 hover:bg-default-700 duration-200 z-50 mx-2 flex items-center justify-center text-3xl text-white shadow-md">
+        <button className="h-14 w-14 rounded-xl bg-default-600 hover:bg-default-700 duration-200 z-50 mx-2 flex items-center justify-center text-3xl text-white shadow-md border-2 border-white">
             {icon}
         </button>
     )

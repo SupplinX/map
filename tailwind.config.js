@@ -41,7 +41,21 @@ module.exports = {
       },
       spacing: {
         '100': '25rem',
-      }
+      },
+      keyframes: {
+        fade_up: {
+          '0%': { opacity: 0, transform: 'translateY(20%)' },
+          '100%': { opacity: 1, transform: 'translateY(0%)' },
+        },
+        fade_in: {
+          '0%': { opacity: 0 },
+          '100%': { opacity: 1 },
+        },
+      },
+      animation: {
+        'fade_up': 'fade_up .1s linear forwards',
+        'fade_in': 'fade_in .1s linear forwards',
+      },
     },
   },
   plugins: [],
