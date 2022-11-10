@@ -25,7 +25,7 @@ export const CompanyList: FC<IProps> = ({ companies }) => {
                 activeClients?.map(company => <CompanyTile key={company.connection_id} company={company.partner} mini={false} />)
             }
         </div>
-        {(activeClients && activeClients.length > 2) && <MoreButton label={`${showAllActive ? 'Show less' : `Show all (${activeClients?.length})`}`} onClick={toggleAllActive.bind(true, !showAllActive)} />}
+        {(activeClients && activeClients.length > 4) && <MoreButton label={`${showAllActive ? 'Show less' : `Show all (${activeClients?.length})`}`} onClick={toggleAllActive.bind(true, !showAllActive)} />}
         <p className="text-2xl font-medium mb-3 mt-10 pl-1">Inactive</p>
         <div className="grid gap-4">
             {

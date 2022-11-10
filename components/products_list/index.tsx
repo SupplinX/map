@@ -21,21 +21,21 @@ export const ProductList: FC<IProps> = ({ products }) => {
             <p className="text-2xl font-medium mb-3 pl-1">Active</p>
             <div className="grid grid-cols-2 gap-2">
                 {
-                    activeProducts?.slice(0, showAllActive ? undefined : 2).map((product, index) => {
+                    activeProducts?.slice(0, showAllActive ? undefined : 6).map((product, index) => {
                         return <ProductCard key={'product' + index} product={product} />
                     })
                 }
             </div>
-            {(products && products.length > 2) && <MoreButton label={`${showAllActive ? 'Show less' : `Show all (${activeProducts?.length})`}`} onClick={toggleAllActive.bind(true, !showAllActive)} />}
+            {(products && products.length > 6) && <MoreButton label={`${showAllActive ? 'Show less' : `Show all (${activeProducts?.length})`}`} onClick={toggleAllActive.bind(true, !showAllActive)} />}
             <p className="text-2xl font-medium mb-3 mt-10 pl-1">Inactive</p>
             <div className="grid grid-cols-2 gap-2">
                 {
-                    inactiveProducts?.slice(0, showAllInactive ? undefined : 4).map((product, index) => {
+                    inactiveProducts?.slice(0, showAllInactive ? undefined : 6).map((product, index) => {
                         return <ProductCard key={'product' + index} product={product} />
                     })
                 }
             </div>
-            {(products && products.length > 4) && <MoreButton label={`${showAllInactive ? 'Show less' : `Show all (${inactiveProducts?.length})`}`} onClick={toggleAllInactive.bind(true, !showAllInactive)} />}
+            {(products && products.length > 6) && <MoreButton label={`${showAllInactive ? 'Show less' : `Show all (${inactiveProducts?.length})`}`} onClick={toggleAllInactive.bind(true, !showAllInactive)} />}
         </div>
     )
 }
