@@ -1,7 +1,7 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import { Button } from "../../components/button";
 import { MdApartment, MdKeyboardArrowDown, MdOutlinePeopleAlt } from "react-icons/md";
-import { FaFacebookF, FaGlobe, FaInstagram, FaTiktok, FaTwitter, FaYoutube, } from "react-icons/fa";
+import { FaFacebookF, FaGlobe, FaInstagram, FaLinkedin, FaTiktok, FaTwitter, FaYoutube, } from "react-icons/fa";
 import { SiPolywork } from 'react-icons/si'
 import { RiToolsFill } from "react-icons/ri";
 import { Chip } from "../../components/chip";
@@ -69,6 +69,11 @@ export const CompanyInfo: FC<IProps> = ({ visible, activeMarker, data, isLoading
                                 <FaGlobe className="text-2xl" />
                             </div>
                         </a>
+                        {data?.linkedin && <a href={data?.linkedin} target="_blank" rel="noreferrer">
+                            <div className="w-8 h-8 bg-black mx-1 flex items-center justify-center rounded-full">
+                                <FaLinkedin className="" />
+                            </div>
+                        </a>}
                         {data?.twitter && <a href={data?.twitter} target="_blank" rel="noreferrer">
                             <div className="w-8 h-8 bg-black mx-1 flex items-center justify-center rounded-full">
                                 <FaTwitter className="" />

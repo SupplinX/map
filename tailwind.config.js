@@ -37,7 +37,9 @@ module.exports = {
         },
         secondary: {
           default: '#FFD166'
-        }
+        },
+        red_marker: '#DE2631',
+        yellow_marker: '#FFD166',
       },
       spacing: {
         '100': '25rem',

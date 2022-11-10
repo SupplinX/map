@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { useMemo, useState } from "react";
+import { MdApartment } from "react-icons/md";
 import { BASE_URL } from "../../pages/_app";
 import { ICompany } from "../../types/company";
 import { Chip } from "../chip";
@@ -22,11 +23,8 @@ export default function CustomMarker({
     type
 }: CustomMarkerProps) {
     const [hovered, setHovered] = useState(false)
-    const background = useMemo(() => {
-        return active ? ' bg-yellow-400 ' : type === 'client' ? ' bg-green-400 ' : type === 'supplier' ? 'bg-purple-400' : type === 'child' ? 'bg-red-400' : type === 'mother' ? ' bg-yellow-600 ' : 'bg-white'
-    }, [active])
     const border = useMemo(() => {
-        return active ? ' border-yellow-400 ' : type === 'client' ? ' border-green-400 ' : type === 'supplier' ? 'border-purple-400' : type === 'child' ? 'border-red-400' : type === 'mother' ? ' border-yellow-600 ' : 'border-white'
+        return active ? ' border-red_marker ' : type === 'client' ? ' border-accent-500 ' : type === 'supplier' ? 'border-yellow_marker' : type === 'child' ? 'border-rose-300' : type === 'mother' ? ' border-red-900 ' : 'border-white'
     }, [active])
 
     return (
@@ -45,8 +43,8 @@ export default function CustomMarker({
                             <div className={`pointer-events-none  bg-white block absolute bottom-[120%] left-1/2 transform -translate-x-1/2 transition duration-200 ${hovered ? 'opacity-100' : 'opacity-0'} rounded-md p-1 w-48`}>
                                 <div className={`w-full h-full border-2 ${border} rounded-sm p-2`}>
                                     <div className="flex items-center">
-                                        <div className="w-6 h-6 bg-gray-300 rounded-full">
-                                            {company.logo?.url ? <Image src={BASE_URL + company.logo.url} alt="Logo" width={24} height={24} /> : <p className="text-2xl font-semibold">{company.name[0]}</p>}
+                                        <div className="w-6 h-6 rounded-full flex items-center justify-center">
+                                            {company.logo?.url ? <Image src={BASE_URL + company.logo.url} alt="Logo" width={24} height={24} /> : <MdApartment className="text-xl" />}
                                         </div>
                                         <p className="font-medium ml-2 mt-0.5">{company.name}</p>
                                     </div>
@@ -58,9 +56,10 @@ export default function CustomMarker({
                                 {active && <div className="absolute right-0 top-0 w-full h-full bg-white rounded-full z-10 animate-ping"></div>}
 
 
-                                <div className={`w-10 h-10 border-4 p-1 ${border} rounded-full relative z-20 flex justify-center items-center`}>
+                                <div className={`w-10 h-10 border-[3px] p-1 ${border} rounded-full relative z-20 flex justify-center items-center`}>
                                     <div className="w-6 h-6 rounded-full overflow-hidden relative">
-                                        {company.logo?.url ? <Image src={BASE_URL + company.logo.url} alt="Logo" width={24} height={24} /> : <p className="text-2xl font-semibold">{company.name[0]}</p>}
+                                        {company.logo?.url ? <Image src={BASE_URL + company.logo.url} alt="Logo" width={24} height={24} /> :
+                                            <MdApartment className="text-2xl" />}
                                     </div>
                                 </div>
 

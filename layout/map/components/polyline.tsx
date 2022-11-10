@@ -23,7 +23,7 @@ export const CustomPolyline: FC<IProps> = ({ path, activeMarker, map }) => {
         return () => {
             polyline.setMap(null);
         }
-    }, [])
+    }, [activeMarker])
 
     // useEffect(() => {
     //     if (activeMarker === null) {

@@ -23,7 +23,7 @@ export default function Home() {
     queryKey: 'company' + activeMarker,
     queryFn: async () => {
       const { data } = await axios.get(`/supplinx/company-info/${activeMarker}`)
-      console.log(data)
+      // console.log(data)
       return data
     },
     enabled: activeMarker !== null
@@ -50,7 +50,7 @@ export default function Home() {
       <div className='fixed right-2 top-2 z-50'>
         <Logo />
       </div>
-      <CompanyInfo toggleProfile={toggleProfile.bind(true, true)} visible={activeMarker !== null} activeMarker={activeMarker} data={companyInfo} isLoading={isLoading} />
+      {/* <CompanyInfo toggleProfile={toggleProfile.bind(true, true)} visible={activeMarker !== null} activeMarker={activeMarker} data={companyInfo} isLoading={isLoading} /> */}
       <MapView industries={industriesIds} products={productsIds} needs={needsIds} activeMarker={activeMarker} setActiveMarker={setActiveMarker} setCompanyInfoVisible={setActiveMarker.bind(true, null)} selectedCompany={companyInfo} />
       <div className='fixed bottom-0 right-0 pb-5 flex flex-row items-center z-50'>
         <MapMenuButton icon={<MdAutoGraph />} />
