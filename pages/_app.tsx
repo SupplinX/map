@@ -3,7 +3,7 @@ import type { AppProps } from 'next/app'
 import { QueryClient, QueryClientProvider, useQuery } from 'react-query'
 import axios from 'axios'
 
-export const BASE_URL = 'https://api.supplinx.com'
+export const BASE_URL = process.env.NODE_ENV === 'development' ? 'http://localhost:1338' : 'https://api.supplinx.com'
 // export const BASE_URL = 'http://localhost:1338'
 
 const queryClient = new QueryClient()

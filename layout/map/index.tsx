@@ -67,6 +67,8 @@ export const MapView: FC<IProps> = ({ setCompanyInfoVisible, setActiveMarker, ac
             }
             console.log(url)
             const { data } = await axios.get(url)
+            if (data.length === 0)
+                return data
             const bounds = new google.maps.LatLngBounds();
             for (const company of data) {
                 bounds.extend(new google.maps.LatLng(parseFloat(company.lat), parseFloat(company.lng)));
