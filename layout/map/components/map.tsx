@@ -23,7 +23,7 @@ const containerStyle = {
 export const Map: FC<IProps> = ({ map, setMap, selectedCompany, activeMarker, setActiveMarker, setCompanyInfoVisible, data, center }) => {
     const { isLoaded } = useJsApiLoader({
         id: 'google-map-script',
-        googleMapsApiKey: "AIzaSyAu8GpDD32d_lLAtHP_tZyWhkbAzXRIy9E",
+        googleMapsApiKey: process.env.API_KEY!,
         mapIds: ['b32819489bc5a143'],
     })
 
