@@ -85,13 +85,6 @@ export const MapView: FC<IProps> = ({ setCompanyInfoVisible, setActiveMarker, ac
             return data
         }
     })
-    const { isLoaded } = useJsApiLoader({
-        id: 'google-map-script',
-        googleMapsApiKey: "AIzaSyAu8GpDD32d_lLAtHP_tZyWhkbAzXRIy9E",
-        mapIds: ['b32819489bc5a143'],
-    })
-
-    if (!isLoaded) return null
 
     return (
         <Map activeMarker={activeMarker} center={center} data={data} map={map} selectedCompany={selectedCompany} setActiveMarker={setActiveMarker} setCompanyInfoVisible={setCompanyInfoVisible} setMap={setMap} />
